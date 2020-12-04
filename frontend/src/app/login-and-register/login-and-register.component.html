@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div>
+    <div class="container" id="key">
+
+      <div class="forms-container">
+          <div class="signin-signup">
+      
+              <form class="sign-in-form" #loginfrm="ngForm" (ngSubmit)="login()">
+        
+                  <h2 class="title">Sign in</h2>
+                  
+                  <div class="input-field" id="email">
+                      <i class="fa fa-envelope"></i>
+                      <input [(ngModel)]="userName" #email="ngModel" ngModel required [class.is-invalid]="email.invalid && email.touched" type="email" name="email" placeholder="Email" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">                
+                    </div>
+
+
+                    <div *ngIf="email.errors && (email.invalid && email.touched)">
+                      <span class="text-danger" *ngIf="email.errors?.required"  >Email cannot be null</span>
+                      <span class="text-danger" *ngIf="email.errors?.pattern">Email Not valid</span>
+                    </div>
+
+                  <div class="input-field" >
+                      <i class="fa fa-lock"></i>
+                      <input  #password="ngModel" ngModel required  [class.is-invalid]="password.invalid && password.touched" type="password" name="password" placeholder="Password" class="form-control" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" [(ngModel)]="password1">                
+                    </div>
+                    
+                    <div *ngIf="password.errors && (password.invalid && password.touched)">
+                      <span class="text-danger" *ngIf="password.errors?.required" >Password cannot be null</span>
+                      <small class="text-danger" *ngIf="password.errors?.pattern" >Password shoud contain minimum 8 characters 1 upper case, 1 lower case, 1 special character, 1 number</small>
+                    </div>
+
+                    <a id="forgetpass-taba" href="#forget_password" style="margin-top: 30px;" aria-controls="forget_password" role="tab" data-toggle="tab" style="color: dodgerblue;">Forgot Password ?</a>
+
+                  
+                    <input type="submit"  id="sign-button" value="Login" class="disable-btn solid" [hidden]="loginfrm.form.valid" [disabled]="!loginfrm.form.valid"/>
+                    <input type="submit" id="sign-button" value="Login" class="btn solid"  [hidden]="!loginfrm.form.valid"/>      
+              </form>
+              
+          </div>
+      </div>
+
+      <div class="panels-container">
+          <div class="panel left-panel"> 
+              <div class="content">
+                  <img src="../assets/pictures/jump1.jpg" style="height: 80px;width: 80px; border-radius: 50%;">
+                  <h3>New here ?</h3>
+                  <p>Organise the time ! Jump the Queue !!!!</p>
+                  <button class="btn transparent" id="sign-up-btn" (click)="signUp()" style="margin-bottom: 10px;">
+                      Sign up
+                    </button>
+              </div>
+              <img src="../assets/pictures/undraw_Queue_j6ij.svg" class="image" alt="" />
+            </div>
+                              
+          
+  </div>
+</div>
