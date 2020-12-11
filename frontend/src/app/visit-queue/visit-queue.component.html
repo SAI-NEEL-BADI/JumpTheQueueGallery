@@ -1,69 +1,89 @@
 <div>
-    <div class="container" id="key">
-  
-      <div class="forms-container">
-          <div class="signin-signup">
-            <div class="event-container">
-
-    
-              <h1 class="title">{{eventName}}</h1>
-            <div class="cards-container">
-              <div class="card">
-                <div class="top">
-                   <b><h2>Queue Number</h2></b>
-                     <h1>
-                       <div><b>{{queuDetail.queueNumber}}</b></div>
-                    </h1>
-                    
-                </div>
-    
-                <div class="mid" *ngIf="!currentFlag">
-                    <span><b>Estimated Time</b></span>
-                    
-                    <div class="card-number">
-                        <span><b>{{demo}}</b></span>
-                    </div>
-                </div>
-                <div class="mid" *ngIf="currentFlag">
-                  <span><b>Attention Time</b></span>
-                  
-                  <div class="attention">
-                      <span><b>{{demo}}</b></span>
+  <div class="container" id="key">
+    <div class="forms-container">
+      <div class="signin-signup">
+        <div class="event-container">
+          <h1 class="title">{{ eventName }}</h1>
+          <div class="cards-container">
+            <div class="card">
+              <div class="top">
+                <b><h2>Queue Number</h2></b>
+                <h1>
+                  <div>
+                    <b>{{ queuDetail.queueNumber }}</b>
                   </div>
+                </h1>
               </div>
-    
-                <div class="bottom">
-                    <div class="card-holder">
-                      <b>Currently being attended</b>
-                    </div>   
-                    <div class="express">
-                        <h2>{{queuDetail.currentlyBeingAttended}}</h2>
 
-                    </div>  
+              <div class="mid" *ngIf="!currentFlag">
+                <span><b>Estimated Time</b></span>
+
+                <div class="card-number">
+                  <span
+                    ><b>{{ demo }}</b></span
+                  >
                 </div>
-                <input type="submit" value="Leave The Queue" class="show-event-btn" (click)="leaveQueue()"/>
-                    </div>
-                    <input type="submit" id="sign-button" value="Go To Events" class="btn solid" (click)="goToEvents()"/>
-                  </div>
-                </div>
-      
-              
-              
-          </div>
-      </div>
-  
-      <div class="panels-container">
-          <div class="panel left-panel"> 
-              <div class="content">
-                  <img src="../assets/pictures/jump1.jpg" style="height: 80px;width: 80px; border-radius: 50%;">
-                  <p>See you again !!!!</p>
-                  <button class="btn transparent" id="sign-up-btn" (click)="logOut()" style="margin-bottom: 10px;">
-                      Log Out
-                    </button>
               </div>
-              <img src="../assets/pictures/undraw_quality_time_wiyl.svg" class="image" alt="" />
+              <div class="mid" *ngIf="currentFlag">
+                <span><b>Attention Time</b></span>
+
+                <div class="attention">
+                  <span
+                    ><b>{{ demo }}</b></span
+                  >
+                </div>
+              </div>
+
+              <div class="bottom">
+                <div class="card-holder">
+                  <b>Currently being attended</b>
+                </div>
+                <div class="express">
+                  <h2>{{ queuDetail.currentlyBeingAttended }}</h2>
+                </div>
+              </div>
+              <input
+                type="submit"
+                value="Leave The Queue"
+                class="show-event-btn"
+                (click)="leaveQueue()"
+              />
             </div>
-                              
-          
+            <input
+              type="submit"
+              id="sign-button"
+              value="Go To Events"
+              class="btn solid"
+              (click)="goToEvents()"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panels-container">
+      <div class="panel left-panel">
+        <div class="content">
+          <img
+            src="../assets/pictures/jump1.jpg"
+            style="height: 80px; width: 80px; border-radius: 50%"
+          />
+          <p>See you again !!!!</p>
+          <button
+            class="btn transparent"
+            id="sign-up-btn"
+            (click)="logOut()"
+            style="margin-bottom: 10px"
+          >
+            Log Out
+          </button>
+        </div>
+        <img
+          src="../assets/pictures/undraw_quality_time_wiyl.svg"
+          class="image"
+          alt=""
+        />
+      </div>
+    </div>
   </div>
-  </div>
+</div>

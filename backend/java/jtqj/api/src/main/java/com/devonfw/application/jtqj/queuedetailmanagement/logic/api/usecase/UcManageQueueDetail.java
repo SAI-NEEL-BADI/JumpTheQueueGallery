@@ -1,9 +1,9 @@
 package com.devonfw.application.jtqj.queuedetailmanagement.logic.api.usecase;
 
 import com.devonfw.application.jtqj.eventmanagement.logic.api.to.EventEto;
-import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.to.QueueDetailCto;
 import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.to.QueueDetailEto;
 import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.to.QueueDetailSearchCriteriaTo;
+import com.devonfw.application.jtqj.visitormanagement.logic.api.to.VisitorEto;
 
 /**
  * Interface of UcManageQueueDetail to centralize documentation and signatures of methods.
@@ -15,8 +15,9 @@ public interface UcManageQueueDetail {
    *
    * @param queueDetailId Id of the queueDetail to delete
    * @return boolean <code>true</code> if the queueDetail can be deleted, <code>false</code> otherwise
+   * @throws Exception
    */
-  boolean deleteQueueDetail(long queueDetailId);
+  boolean deleteQueueDetail(long queueDetailId) throws Exception;
 
   /**
    * Saves a queueDetail and store it in the database.
@@ -29,20 +30,42 @@ public interface UcManageQueueDetail {
   /**
    * @param criteria
    * @return QueueDetailCto
+   * @throws Exception
    */
-  QueueDetailCto joinTheQueue(QueueDetailSearchCriteriaTo criteria);
+  QueueDetailEto joinTheQueue(QueueDetailSearchCriteriaTo criteria) throws Exception;
 
   /**
-   * @param eventId
    * @param event
    * @return String
    */
-  String getQueueNumber(long eventId, EventEto event);
+  String getQueueNumber(EventEto event);
 
   /**
-   * @return
+   * @param event
+   * @return boolean
    *
    */
-  boolean setEstimatedTime(EventEto event);
+  void setEstimatedTime(EventEto event);
+
+  /**
+   * @param visitorId
+   * @return VisitorEto
+   * @throws Exception
+   */
+  VisitorEto getVisitor(long visitorId) throws Exception;
+
+  /**
+   * @param eventId
+   * @return EventEto
+   * @throws Exception
+   */
+  EventEto getEvent(long eventId) throws Exception;
+
+  /**
+   * @param queueDetailId
+   * @return
+   * @throws Exception
+   */
+  QueueDetailEto getQueueDetail(long queueDetailId) throws Exception;
 
 }

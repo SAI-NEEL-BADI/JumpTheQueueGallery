@@ -33,7 +33,7 @@ public class QueuedetailmanagementRestServiceImpl implements Queuedetailmanageme
   }
 
   @Override
-  public void deleteQueueDetail(long id) {
+  public void deleteQueueDetail(long id) throws Exception {
 
     this.queuedetailmanagement.deleteQueueDetail(id);
   }
@@ -58,7 +58,7 @@ public class QueuedetailmanagementRestServiceImpl implements Queuedetailmanageme
   }
 
   @Override
-  public QueueDetailCto joinTheQueue(QueueDetailSearchCriteriaTo searchCriteriaTo) {
+  public QueueDetailEto joinTheQueue(QueueDetailSearchCriteriaTo searchCriteriaTo) throws Exception {
 
     return this.queuedetailmanagement.joinTheQueue(searchCriteriaTo);
   }

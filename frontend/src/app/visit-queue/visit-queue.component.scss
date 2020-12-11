@@ -7,7 +7,6 @@
   font-family: "Poppins", sans-serif;
 }
 
-
 .container {
   position: relative;
   width: 100%;
@@ -152,8 +151,6 @@
   padding: 3rem 17% 2rem 12%;
 }
 
-
-
 .panel .content {
   color: #fff;
   transition: transform 0.9s ease-in-out;
@@ -181,15 +178,12 @@
   font-size: 0.8rem;
 }
 
-
-
 /* ANIMATION */
 
 .container.sign-up-mode:before {
   transform: translate(100%, -50%);
   right: 52%;
 }
-
 
 .container.sign-up-mode .left-panel .image,
 .container.sign-up-mode .left-panel .content {
@@ -213,8 +207,6 @@
 .container.sign-up-mode .left-panel {
   pointer-events: none;
 }
-
-
 
 @media (max-width: 870px) {
   .container {
@@ -245,8 +237,6 @@
     padding: 2.5rem 8%;
     grid-column: 1 / 2;
   }
-
-  
 
   .left-panel {
     grid-row: 1 / 2;
@@ -301,9 +291,6 @@
     transform: translateY(-300px);
   }
 
-  
-
-  
   .container.sign-up-mode .signin-signup {
     top: 5%;
     transform: translate(-50%, 0);
@@ -336,25 +323,13 @@
   }
 }
 
-
-
-
-
-
-
-
 .wrapper-flex {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-
-
-
 .name {
- 
- 
   margin-top: 10px;
 }
 
@@ -363,62 +338,57 @@
   font-size: 0.9rem;
 }
 
-
-.card{
-    width: 320px;
-    height: 280px;
-    position: relative;
-    box-shadow: inset 0 0 5px #2a6cdd;
-    border-radius: 5px;
-    margin-left: 10px;
-    margin-bottom: 10px;
-    padding:1rem;
-    border: 2px solid  #4481eb;
+.card {
+  width: 320px;
+  height: 280px;
+  position: relative;
+  box-shadow: inset 0 0 5px #2a6cdd;
+  border-radius: 5px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  padding: 1rem;
+  border: 2px solid #4481eb;
 }
 
-
-.card .top{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.card .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.card .top .h2{
+.card .top .h2 {
   display: block;
 }
 
-h1{
-    font-size: 33px;
-    text-transform: uppercase;
-    color: #2a6cdd;
+h1 {
+  font-size: 33px;
+  text-transform: uppercase;
+  color: #2a6cdd;
 }
-h2{
-    font-size: 20px;
-    letter-spacing: 1px;
-}
-
-
-.card .mid{
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-    text-align: center;
+h2 {
+  font-size: 20px;
+  letter-spacing: 1px;
 }
 
-.card .mid .card-number span{
-   
-    padding: 3px 5px;
-    display: inline-block;
-    font-size: 25px;
-    letter-spacing: 1px;
-    color: rgb(233, 19, 12);
+.card .mid {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  text-align: center;
 }
 
-.card-number span + span{
-    margin: 3px 3px;
+.card .mid .card-number span {
+  padding: 3px 5px;
+  display: inline-block;
+  font-size: 25px;
+  letter-spacing: 1px;
+  color: rgb(233, 19, 12);
 }
 
-.card .mid .attention span{
-   
+.card-number span + span {
+  margin: 3px 3px;
+}
+
+.card .mid .attention span {
   padding: 3px 5px;
   display: inline-block;
   font-size: 25px;
@@ -426,32 +396,32 @@ h2{
   color: rgb(43, 179, 179);
 }
 
-.attention span + span{
+.attention span + span {
   margin: 3px 3px;
 }
 
-.card .bottom{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
+.card .bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
 }
-.card .bottom span{
-    display: inline-block;
-    border: 1px solid grey;
-    padding: 2px 4px;
-    border-radius: 2px;
-    font-size: 14px;
-    margin-top: 5px;
-    text-transform: uppercase;
+.card .bottom span {
+  display: inline-block;
+  border: 1px solid grey;
+  padding: 2px 4px;
+  border-radius: 2px;
+  font-size: 14px;
+  margin-top: 5px;
+  text-transform: uppercase;
 }
 
-.card .bottom .card-holder span{
-    width: 150px;
-    height: 22px;
+.card .bottom .card-holder span {
+  width: 150px;
+  height: 22px;
 }
-.bottom span + span{
-    margin-left: 5px;
+.bottom span + span {
+  margin-left: 5px;
 }
 
 .button1 {
@@ -470,7 +440,7 @@ h2{
   margin-bottom: 5px;
 }
 .button1:hover {
-  background-color:  rgb(139, 214, 142);
+  background-color: rgb(139, 214, 142);
   color: white;
   transition-duration: 1s;
 }
@@ -491,13 +461,13 @@ h2{
   margin-bottom: 5px;
 }
 .button2:hover {
-  background-color:  rgb(221, 56, 44);
+  background-color: rgb(221, 56, 44);
   color: white;
   transition-duration: 1s;
 }
 .event-botton {
   background-color: #fff;
-  color:#04befe;
+  color: #04befe;
   width: 60px;
 }
 .event-btn {
@@ -514,13 +484,12 @@ h2{
   cursor: pointer;
   transition: 0.5s;
 }
-.event-btn:hover{
-  color:#265dbb;
+.event-btn:hover {
+  color: #265dbb;
   border: 2px solid #3d76d8;
-transform: scale(1.075);
-  
+  transform: scale(1.075);
 }
-.cards-container{
+.cards-container {
   overflow: hidden;
   background-color: rgb(255, 255, 255);
   text-align: center;
@@ -531,7 +500,7 @@ transform: scale(1.075);
   margin-left: 2rem;
   margin-right: 1rem;
   font-family: sans-serif;
-  font-weight: 100;    
+  font-weight: 100;
   min-width: 340px;
 }
 .show-event-btn {
@@ -550,10 +519,9 @@ transform: scale(1.075);
   margin-top: 10px;
   opacity: 0.9;
 }
-.show-event-btn:hover{
-  color:red;
+.show-event-btn:hover {
+  color: red;
   border: 2px solid red;
-transform: scale(1.075);
-opacity: 1;
-  
+  transform: scale(1.075);
+  opacity: 1;
 }

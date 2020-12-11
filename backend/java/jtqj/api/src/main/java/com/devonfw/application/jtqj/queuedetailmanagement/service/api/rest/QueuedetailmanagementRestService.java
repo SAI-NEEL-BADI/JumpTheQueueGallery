@@ -48,10 +48,11 @@ public interface QueuedetailmanagementRestService {
    * Delegates to {@link Queuedetailmanagement#deleteQueueDetail}.
    *
    * @param id ID of the {@link QueueDetailEto} to be deleted
+   * @throws Exception
    */
   @DELETE
   @Path("/queuedetail/{id}/")
-  public void deleteQueueDetail(@PathParam("id") long id);
+  public void deleteQueueDetail(@PathParam("id") long id) throws Exception;
 
   /**
    * Delegates to {@link Queuedetailmanagement#findQueueDetailEtos}.
@@ -92,8 +93,9 @@ public interface QueuedetailmanagementRestService {
    *
    * @param searchCriteriaTo the pagination and search criteria to be used for finding queuedetails.
    * @return the {@link Page list} of matching {@link QueueDetailCto}s.
+   * @throws Exception
    */
   @Path("/queuedetail/jointhequeue")
   @POST
-  public QueueDetailCto joinTheQueue(QueueDetailSearchCriteriaTo searchCriteriaTo);
+  public QueueDetailEto joinTheQueue(QueueDetailSearchCriteriaTo searchCriteriaTo) throws Exception;
 }

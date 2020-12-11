@@ -6,8 +6,8 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
-.text-danger{
-  color:red;
+.text-danger {
+  color: red;
 }
 
 .container {
@@ -75,7 +75,7 @@ form.sign-in-form {
   display: grid;
   grid-template-columns: 15% 85%;
   padding: 0 0.4rem;
-  
+
   position: relative;
 }
 
@@ -164,8 +164,6 @@ form.sign-in-form {
   padding: 3rem 17% 2rem 12%;
 }
 
-
-
 .panel .content {
   color: #fff;
   transition: transform 0.9s ease-in-out;
@@ -193,15 +191,12 @@ form.sign-in-form {
   font-size: 0.8rem;
 }
 
-
-
 /* ANIMATION */
 
 .container.sign-up-mode:before {
   transform: translate(100%, -50%);
   right: 52%;
 }
-
 
 .container.sign-up-mode .left-panel .image,
 .container.sign-up-mode .left-panel .content {
@@ -225,8 +220,6 @@ form.sign-in-form {
 .container.sign-up-mode .left-panel {
   pointer-events: none;
 }
-
-
 
 @media (max-width: 870px) {
   .container {
@@ -257,8 +250,6 @@ form.sign-in-form {
     padding: 2.5rem 8%;
     grid-column: 1 / 2;
   }
-
-  
 
   .left-panel {
     grid-row: 1 / 2;
@@ -313,9 +304,6 @@ form.sign-in-form {
     transform: translateY(-300px);
   }
 
-  
-
-  
   .container.sign-up-mode .signin-signup {
     top: 5%;
     transform: translate(-50%, 0);
@@ -355,7 +343,7 @@ form.sign-in-form {
   outline: none;
   height: 49px;
   border-radius: 49px;
-  color:  #fff;
+  color: #fff;
   text-transform: uppercase;
   font-weight: 600;
   margin: 10px 0;

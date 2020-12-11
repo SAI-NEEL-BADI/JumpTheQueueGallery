@@ -13,6 +13,7 @@ import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.to.QueueDeta
 import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.to.QueueDetailSearchCriteriaTo;
 import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.usecase.UcFindQueueDetail;
 import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.usecase.UcManageQueueDetail;
+import com.devonfw.application.jtqj.visitormanagement.logic.api.to.VisitorEto;
 
 /**
  * Implementation of component interface of queuedetailmanagement
@@ -45,7 +46,7 @@ public class QueuedetailmanagementImpl extends AbstractComponentFacade implement
   }
 
   @Override
-  public boolean deleteQueueDetail(long id) {
+  public boolean deleteQueueDetail(long id) throws Exception {
 
     return this.ucManageQueueDetail.deleteQueueDetail(id);
   }
@@ -63,21 +64,39 @@ public class QueuedetailmanagementImpl extends AbstractComponentFacade implement
   }
 
   @Override
-  public QueueDetailCto joinTheQueue(QueueDetailSearchCriteriaTo criteria) {
+  public QueueDetailEto joinTheQueue(QueueDetailSearchCriteriaTo criteria) throws Exception {
 
     return this.ucManageQueueDetail.joinTheQueue(criteria);
   }
 
   @Override
-  public String getQueueNumber(long eventId, EventEto event) {
+  public String getQueueNumber(EventEto event) {
 
-    return this.ucManageQueueDetail.getQueueNumber(eventId, event);
+    return this.ucManageQueueDetail.getQueueNumber(event);
   }
 
   @Override
-  public boolean setEstimatedTime(EventEto event) {
+  public void setEstimatedTime(EventEto event) {
 
-    return this.ucManageQueueDetail.setEstimatedTime(event);
+    this.ucManageQueueDetail.setEstimatedTime(event);
+  }
+
+  @Override
+  public VisitorEto getVisitor(long visitorId) throws Exception {
+
+    return this.ucManageQueueDetail.getVisitor(visitorId);
+  }
+
+  @Override
+  public EventEto getEvent(long eventId) throws Exception {
+
+    return this.ucManageQueueDetail.getEvent(eventId);
+  }
+
+  @Override
+  public QueueDetailEto getQueueDetail(long queueDetailId) throws Exception {
+
+    return this.ucManageQueueDetail.getQueueDetail(queueDetailId);
   }
 
 }

@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 
 import com.devonfw.application.jtqj.SpringBootApp;
 import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.Queuedetailmanagement;
-import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.to.QueueDetailCto;
 import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.to.QueueDetailEto;
 import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.to.QueueDetailSearchCriteriaTo;
 import com.devonfw.module.test.common.base.ComponentTest;
@@ -61,16 +60,16 @@ public class QueueDetailManagementTest extends ComponentTest {
   }
 
   @Test
-  public void joinTheQueueTest() {
+  public void joinTheQueueTest() throws Exception {
 
     long id = 1;
     QueueDetailSearchCriteriaTo criteria = new QueueDetailSearchCriteriaTo();
     criteria.setVisitorId(id);
     criteria.setEventId(id);
-    QueueDetailCto result = this.queuedetailmanagement.joinTheQueue(criteria);
-    assertEquals(result.getVisitor().getId(), criteria.getVisitorId());
-    assertEquals(result.getEvent().getId(), criteria.getEventId());
-    assertThat(result.getQueueDetail().getQueueNumber()).isNotNull();
+    QueueDetailEto result = this.queuedetailmanagement.joinTheQueue(criteria);
+    assertEquals(result.getVisitorId(), criteria.getVisitorId());
+    assertEquals(result.getEventId(), criteria.getEventId());
+    assertThat(result.getId()).isNotNull();
   }
 
   /**

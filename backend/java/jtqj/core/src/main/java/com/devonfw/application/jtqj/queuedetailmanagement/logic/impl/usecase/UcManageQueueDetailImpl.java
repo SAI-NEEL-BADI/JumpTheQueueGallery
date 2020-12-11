@@ -2,7 +2,6 @@ package com.devonfw.application.jtqj.queuedetailmanagement.logic.impl.usecase;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,7 +18,6 @@ import com.devonfw.application.jtqj.eventmanagement.dataaccess.api.EventEntity;
 import com.devonfw.application.jtqj.eventmanagement.logic.api.Eventmanagement;
 import com.devonfw.application.jtqj.eventmanagement.logic.api.to.EventEto;
 import com.devonfw.application.jtqj.queuedetailmanagement.dataaccess.api.QueueDetailEntity;
-import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.to.QueueDetailCto;
 import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.to.QueueDetailEto;
 import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.to.QueueDetailSearchCriteriaTo;
 import com.devonfw.application.jtqj.queuedetailmanagement.logic.api.usecase.UcManageQueueDetail;
@@ -48,16 +46,11 @@ public class UcManageQueueDetailImpl extends AbstractQueueDetailUc implements Uc
   private static final Logger LOG = LoggerFactory.getLogger(UcManageQueueDetailImpl.class);
 
   @Override
-  public boolean deleteQueueDetail(long queueDetailId) {
+  public boolean deleteQueueDetail(long queueDetailId) throws Exception {
 
     QueueDetailEntity queueDetail = getQueueDetailRepository().find(queueDetailId);
-    EventEto event = this.eventManagement.findEvent(queueDetail.getEventId());
-    int count = event.getVisitorsCount();
-    if (count > 0) {
-      count = count - 1;
-    }
-    event.setVisitorsCount(count);
-    this.eventManagement.saveEvent(event);
+    EventEto event = getEvent(queueDetail.getEventId());
+    decreaseCount(event);
     setEstimatedTime(event);
     getQueueDetailRepository().delete(queueDetail);
 
@@ -79,110 +72,148 @@ public class UcManageQueueDetailImpl extends AbstractQueueDetailUc implements Uc
   }
 
   @Override
-  public QueueDetailCto joinTheQueue(QueueDetailSearchCriteriaTo criteria) {
+  public QueueDetailEto joinTheQueue(QueueDetailSearchCriteriaTo criteria) throws Exception {
 
-    VisitorEto visitorEntity = this.visitorManagement.findVisitor(criteria.getVisitorId());
-    EventEto event = this.eventManagement.findEvent(criteria.getEventId());
+    VisitorEto visitorEntity = getVisitor(criteria.getVisitorId());
+    EventEto event = getEvent(criteria.getEventId());
 
     Page<QueueDetailEntity> queueDetail = getQueueDetailRepository().findByCriteria(criteria);
-
     if (queueDetail.getContent().isEmpty()) {
-
-      QueueDetailEntity newQueueDetail = new QueueDetailEntity();
-      newQueueDetail.setQueueNumber(getQueueNumber(criteria.getEventId(), event));
-
-      newQueueDetail.setCreationTime(Timestamp.from(Instant.now()));
-      newQueueDetail.setStartTime(event.getStartDate());
-      newQueueDetail.setEndTime(event.getEndDate());
-      newQueueDetail.setEvent(getBeanMapper().map(event, EventEntity.class));
-      newQueueDetail.setVisitor(getBeanMapper().map(visitorEntity, VisitorEntity.class));
-      long time = Timestamp.from(Instant.now()).getTime();
-      long minutes = event.getAttentionTime() * 60;
-      newQueueDetail.setEstimatedTime(new Timestamp(time + (minutes)));
-      newQueueDetail.setAttentionTime(new Timestamp(time + (minutes)));
+      QueueDetailEntity newQueueDetail = createQueueDetail(visitorEntity, event);
       QueueDetailEntity queueDetailResult = getQueueDetailRepository().save(newQueueDetail);
       setEstimatedTime(event);
-      QueueDetailCto queueCto = new QueueDetailCto();
-      queueCto.setEvent(event);
-      queueCto.setVisitor(visitorEntity);
-      queueCto.setQueueDetail(
-          getBeanMapper().map(getQueueDetailRepository().find(newQueueDetail.getId()), QueueDetailEto.class));
-      return queueCto;
-    }
-
-    else {
-      QueueDetailEntity entity = getQueueDetailRepository().find(queueDetail.getContent().get(0).getId());
-      QueueDetailCto cto = new QueueDetailCto();
-      cto.setQueueDetail(getBeanMapper().map(entity, QueueDetailEto.class));
-      cto.setVisitor(getBeanMapper().map(entity.getVisitor(), VisitorEto.class));
-      cto.setEvent(getBeanMapper().map(entity.getEvent(), EventEto.class));
-
-      return cto;
+      return getBeanMapper().map(queueDetailResult, QueueDetailEto.class);
+    } else {
+      return getQueueDetail(queueDetail.getContent().get(0).getId());
     }
   }
 
   @Override
-  public String getQueueNumber(long eventId, EventEto event) {
+  public String getQueueNumber(EventEto event) {
 
-    QueueDetailSearchCriteriaTo criteria = new QueueDetailSearchCriteriaTo();
-    criteria.setEventId(eventId);
-    Page<QueueDetailEntity> queueDetails = getQueueDetailRepository().findByCriteria(criteria);
+    Page<QueueDetailEntity> queueDetails = getQueueDetails(event.getId());
     event.setVisitorsCount(queueDetails.getNumberOfElements() + 1);
     this.eventManagement.saveEvent(event);
-
-    String queueNumber;
     if (queueDetails.getContent().isEmpty()) {
-      queueNumber = "Q" + eventId + "01";
-      return queueNumber;
+      return "Q" + event.getId() + "01";
     } else {
-      queueNumber = queueDetails.getContent().get(queueDetails.getNumberOfElements() - 1).getQueueNumber();
+      String queueNumber = queueDetails.getContent().get(queueDetails.getNumberOfElements() - 1).getQueueNumber();
       char[] numbers = new char[queueNumber.length()];
       for (int i = 0; i < queueNumber.length(); i++) {
         numbers[i] = queueNumber.charAt(i);
       }
-
-      int lastNumber = numbers[queueNumber.length() - 1];
-      lastNumber = lastNumber + 1;
-      numbers[queueNumber.length() - 1] = (char) lastNumber;
+      numbers[queueNumber.length() - 1] = (char) (numbers[queueNumber.length() - 1] + 1);
       String newQueueNumber = new String(numbers);
+
+      // check logic again
       return newQueueNumber;
     }
+  }
+
+  // make it void
+  @Override
+  public void setEstimatedTime(EventEto event) {
+
+    List<QueueDetailEntity> queueDetailsList = getQueueDetails(event.getId()).getContent();
+    if (queueDetailsList == null) {
+      return;
+    }
+    long time = 0;
+    long minAttentionTime = event.getAttentionTime() * 60;
+    int count = 0;
+    for (QueueDetailEntity queueEntity : queueDetailsList) {
+      if (count == 0) {
+        queueEntity.setEstimatedTime(Timestamp.from(Instant.now()));
+        getQueueDetailRepository().save(queueEntity);
+        time = queueEntity.getAttentionTime().getTime();
+      } else {
+        if (Timestamp.from(Instant.now()).compareTo(queueEntity.getAttentionTime()) < 0) {
+          queueEntity.setEstimatedTime(new Timestamp(time + (minAttentionTime * count - 1)));
+          queueEntity.setAttentionTime(new Timestamp(time + (minAttentionTime * count - 1) + minAttentionTime));
+          getQueueDetailRepository().save(queueEntity);
+          count = count + 1;
+        }
+      }
+    }
+  }
+
+  /**
+   * @param event
+   */
+  public void decreaseCount(EventEto event) {
+
+    int count = event.getVisitorsCount();
+    if (count > 0) {
+      count--;
+    }
+    event.setVisitorsCount(count);
+    this.eventManagement.saveEvent(event);
 
   }
 
   @Override
-  public boolean setEstimatedTime(EventEto event) {
+  public VisitorEto getVisitor(long visitorId) throws Exception {
 
-    long time = Timestamp.from(Instant.now()).getTime();
-    Timestamp currentTime = Timestamp.from(Instant.now());
-    int checkTime;
-    long minutes;
-    int count;
-    minutes = event.getAttentionTime() * 60;// 55000......(minutes * 1000 * 60)
-    count = 0;
-    QueueDetailSearchCriteriaTo criteria = new QueueDetailSearchCriteriaTo();
-    criteria.setEventId(event.getId());
-    Page<QueueDetailEntity> queueDetails = getQueueDetailRepository().findByCriteria(criteria);
-    List<QueueDetailEntity> queueDetailsList = new ArrayList<>();
-    queueDetailsList = queueDetails.getContent();
-
-    if (queueDetailsList != null) {
-      for (QueueDetailEntity queueEntity : queueDetailsList) {
-        if (count == 0) {
-          queueEntity.setEstimatedTime(currentTime);
-          getQueueDetailRepository().save(queueEntity);
-          time = queueEntity.getAttentionTime().getTime();
-        } else {
-          checkTime = currentTime.compareTo(queueEntity.getAttentionTime());
-          if (checkTime < 0) {
-            queueEntity.setEstimatedTime(new Timestamp(time + (minutes * count - 1)));
-            queueEntity.setAttentionTime(new Timestamp(time + (minutes * count - 1) + minutes));
-            getQueueDetailRepository().save(queueEntity);
-            count = count + 1;
-          }
-        }
-      }
+    VisitorEto visitorEntity = this.visitorManagement.findVisitor(visitorId);
+    if (visitorEntity == null) {
+      throw new Exception("Visitor not found");
     }
-    return true;
+    return visitorEntity;
+
   }
+
+  @Override
+  public EventEto getEvent(long eventId) throws Exception {
+
+    EventEto event = this.eventManagement.findEvent(eventId);
+    if (event == null) {
+      throw new Exception("Event not found");
+    }
+    return event;
+  }
+
+  @Override
+  public QueueDetailEto getQueueDetail(long queueDetailId) throws Exception {
+
+    QueueDetailEntity queueDetail = getQueueDetailRepository().find(queueDetailId);
+    if (queueDetail == null) {
+      throw new Exception("QueueDetail not found");
+    }
+    return getBeanMapper().map(queueDetail, QueueDetailEto.class);
+  }
+
+  /**
+   * @param eventId
+   * @return Page<QueueDetailEntity>
+   */
+  Page<QueueDetailEntity> getQueueDetails(long eventId) {
+
+    QueueDetailSearchCriteriaTo criteria = new QueueDetailSearchCriteriaTo();
+    criteria.setEventId(eventId);
+    return getQueueDetailRepository().findByCriteria(criteria);
+
+  }
+
+  /**
+   * @param visitor
+   * @param event
+   * @return QueueDetailEntity
+   */
+  public QueueDetailEntity createQueueDetail(VisitorEto visitor, EventEto event) {
+
+    QueueDetailEntity newQueueDetail = new QueueDetailEntity();
+
+    newQueueDetail.setQueueNumber(getQueueNumber(event));
+    newQueueDetail.setCreationTime(Timestamp.from(Instant.now()));
+    newQueueDetail.setStartTime(event.getStartDate());
+    newQueueDetail.setEndTime(event.getEndDate());
+    long time = Timestamp.from(Instant.now()).getTime();
+    long minutes = event.getAttentionTime() * 60;
+    newQueueDetail.setEstimatedTime(new Timestamp(time + (minutes)));
+    newQueueDetail.setAttentionTime(new Timestamp(time + (minutes)));
+    newQueueDetail.setEvent(getBeanMapper().map(event, EventEntity.class));
+    newQueueDetail.setVisitor(getBeanMapper().map(visitor, VisitorEntity.class));
+    return newQueueDetail;
+  }
+
 }
