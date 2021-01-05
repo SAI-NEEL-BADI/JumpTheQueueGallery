@@ -10,7 +10,9 @@ import { RegisterVisitor } from '../models/register-visitor';
 export class RegisterService {
   constructor(private http: HttpClient) {}
 
-  public saveVisitor(registerForm: RegisterVisitor): Observable<any> {
-    return this.http.post(JtqConstants.SIGN_UP_URL, registerForm);
+  // tslint:disable-next-line: typedef
+  public async saveVisitor(registerForm: RegisterVisitor) {
+    const promise = await this.http.post(JtqConstants.SIGN_UP_URL, registerForm).toPromise();
+    return JSON.stringify(promise);
   }
 }

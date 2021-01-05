@@ -10,8 +10,10 @@ import { Login } from './login';
 export class LoginService {
 
   constructor(private http: HttpClient) { }
-
- public getVisitor(loginForm: Login): Observable<any>{
-     return this.http.post( JtqConstants.LOGIN_URL, loginForm);
+  // tslint:disable-next-line: typedef
+  public async getVisitor(loginForm: Login)
+  {
+  const promise =  await this.http.post(JtqConstants.LOGIN_URL, loginForm).toPromise();
+  return JSON.stringify(promise);
   }
 }

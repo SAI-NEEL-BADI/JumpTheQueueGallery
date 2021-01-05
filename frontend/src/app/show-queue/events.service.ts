@@ -12,8 +12,11 @@ import { VisitorCriteria } from '../models/visitor-criteria';
 export class EventsService {
   constructor(private http: HttpClient) {}
 
-  public getEvents(eventSearch: SearchCriteria): Observable<any> {
-    return this.http.post(JtqConstants.GET_ALL_EVENTS_URL, eventSearch);
+  // tslint:disable-next-line: typedef
+  public async getEvents()
+  {
+    const promise =  await this.http.get(JtqConstants.GET_ALL_EVENTS_URL).toPromise();
+    return JSON.stringify(promise);
   }
   public getVisitorEventQueueDetails(
     visitorCriteria: VisitorCriteria

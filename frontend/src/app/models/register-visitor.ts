@@ -3,7 +3,7 @@ export class RegisterVisitor {
     name: string;
     phoneNumber: string;
     password: string;
-    acceptedCommercial: boolean;
+    acceptedCommercials: boolean;
     acceptedTerms: boolean;
     userType: boolean;
 

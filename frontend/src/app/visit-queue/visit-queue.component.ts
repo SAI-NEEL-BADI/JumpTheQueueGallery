@@ -75,10 +75,7 @@ export class VisitQueueComponent implements OnInit {
     },
     (error) => {
       window.alert('Something went wrong. Try again');
-      localStorage.removeItem('visitor');
-      localStorage.removeItem('events');
-      localStorage.removeItem('queueDetails');
-      this.router.navigateByUrl('/jumpthequeue/login');
+      this.router.navigateByUrl('/jumpthequeue/visit-queue/' + this.eventName);
     }
   );
   }

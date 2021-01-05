@@ -38,8 +38,8 @@ export class ShowQueueComponent implements OnInit {
     } else {
       this.visitorCriteria.visitorId = this.visitor.id;
       this.joinEvent.visitorId = this.visitor.id;
-      this.eventService.getEvents(this.criteria).subscribe((data) => {
-        this.events = data.content;
+      this.eventService.getEvents().then((data) => {
+        this.events = JSON.parse(data);
         for (const item of this.events) {
           item.isJoined = false;
           item.currentlyBeingAttended = '- -';
@@ -51,14 +51,17 @@ export class ShowQueueComponent implements OnInit {
     }
     this.localEvents = JSON.parse(localStorage.getItem('events'));
   }
+  // tslint:disable-next-line: typedef
   logOut() {
     localStorage.removeItem('visitor');
     this.router.navigateByUrl('/jumpthequeue/login');
   }
+  // tslint:disable-next-line: typedef
   goToQueue(eventName: string, eventId: number) {
     this.setLocalQueueDetails(eventId);
     this.router.navigateByUrl('/jumpthequeue/visit-queue/' + eventName);
   }
+  // tslint:disable-next-line: typedef
   joinQueue(eventName: string, eventId: number) {
     this.joinEvent.eventId = eventId;
     this.eventService.joinQueue(this.joinEvent).subscribe(
@@ -80,10 +83,7 @@ export class ShowQueueComponent implements OnInit {
               }
             }
             localStorage.setItem('events', JSON.stringify(this.localEvents));
-            localStorage.setItem(
-              'queueDetails',
-              JSON.stringify(this.queueDetails)
-            );
+            localStorage.setItem('queueDetails', JSON.stringify(this.queueDetails));
 
             this.getAllQueueDetails();
             this.setLocalQueueDetails(eventId);
@@ -97,6 +97,7 @@ export class ShowQueueComponent implements OnInit {
     );
   }
 
+  // tslint:disable-next-line: typedef
   setLocalQueueDetails(eventId: number) {
     this.queueDetails = JSON.parse(localStorage.getItem('queueDetails'));
     this.localEvents = JSON.parse(localStorage.getItem('events'));
@@ -117,6 +118,7 @@ export class ShowQueueComponent implements OnInit {
     }
   }
 
+  // tslint:disable-next-line: typedef
   updateVisitorQueueDetails() {
     this.eventService
       .getVisitorEventQueueDetails(this.visitorCriteria)
@@ -138,6 +140,7 @@ export class ShowQueueComponent implements OnInit {
       });
   }
 
+  // tslint:disable-next-line: typedef
   getAllQueueDetails() {
     this.localEvents = JSON.parse(localStorage.getItem('events'));
     this.eventService.getAllQueueDetails(this.criteria).subscribe((data) => {

@@ -38,38 +38,36 @@ export class LoginAndRegisterComponent implements OnInit {
     }
   }
 
-  login() {
+  // tslint:disable-next-line: typedef
+  signUp() {
+    this.router.navigateByUrl('/jumpthequeue/register');
+  }
+
+  // tslint:disable-next-line: typedef
+  login(){
     this.loginForm.username = this.userName;
     this.loginForm.password = this.password1;
-    this.loginService.getVisitor(this.loginForm).subscribe(
-      (data) => {
-        this.visitorDetails = data.content[0];
-        if (
-          this.visitorDetails.username === this.userName &&
-          this.visitorDetails.password === this.password1
-        ) {
-          this.localUser.id = this.visitorDetails.id;
-          this.localUser.name = this.visitorDetails.name;
-          this.localUser.username = this.visitorDetails.username;
-          this.localUser.phoneNumber = this.visitorDetails.phoneNumber;
-          this.localUser.acceptedTerms = this.visitorDetails.acceptedTerms;
-          this.localUser.acceptedCommercial = this.visitorDetails.acceptedCommercial;
-          this.localUser.userType = this.visitorDetails.userType;
-          localStorage.setItem('visitor', JSON.stringify(this.localUser));
-          this.router.navigateByUrl('/jumpthequeue/join-leave');
-        } else {
-          window.alert('not registerd. try again or sign up');
-          this.router.navigateByUrl('/');
-        }
-      },
-      (error) => {
-        window.alert('Something went wrong. Try again');
-        this.router.navigateByUrl('/');
-      }
+    this.loginService.getVisitor(this.loginForm).then((res) => {
+    this.visitorDetails = JSON.parse(res);
+    this.saveDetails();
+    },
+   (con) => {
+    window.alert('Wrong Username or Password');
+    this.router.navigateByUrl('/');
+   }
     );
   }
 
-  signUp() {
-    this.router.navigateByUrl('/jumpthequeue/register');
+  // tslint:disable-next-line: typedef
+  saveDetails(){
+      this.localUser.id = this.visitorDetails.id;
+      this.localUser.name = this.visitorDetails.name;
+      this.localUser.username = this.visitorDetails.username;
+      this.localUser.phoneNumber = this.visitorDetails.phoneNumber;
+      this.localUser.acceptedTerms = this.visitorDetails.acceptedTerms;
+      this.localUser.acceptedCommercial = this.visitorDetails.acceptedCommercial;
+      this.localUser.userType = this.visitorDetails.userType;
+      localStorage.setItem('visitor', JSON.stringify(this.localUser));
+      this.router.navigateByUrl('/jumpthequeue/join-leave');
   }
 }

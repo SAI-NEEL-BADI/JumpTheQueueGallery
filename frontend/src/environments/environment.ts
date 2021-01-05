@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  SPRING_WEB_URL: 'http://localhost:8081/jumpthequeue/services/rest/'
+  JTQ_WEB_URL: 'http://localhost:3000/v1/'
 
 };
 

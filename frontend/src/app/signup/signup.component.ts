@@ -17,13 +17,15 @@ export class SignupComponent implements OnInit {
   msg: string;
   errorMsg: string;
   ngOnInit(): void {}
+  // tslint:disable-next-line: typedef
   signIn() {
     this.router.navigateByUrl('/jumpthequeue/login');
   }
+  // tslint:disable-next-line: typedef
   registerVisitor() {
     this.registerForm.userType = true;
-    this.registerService.saveVisitor(this.registerForm).subscribe((data) => {
-      this.msg = data;
+    this.registerService.saveVisitor(this.registerForm).then((data) => {
+      this.msg = JSON.parse(data);
       this.router.navigateByUrl('/jumpthequeue/login');
     });
   }
