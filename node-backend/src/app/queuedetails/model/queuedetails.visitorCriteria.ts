@@ -1,3 +1,3 @@
 export class VisitorCriteria {
-    idVisitor: number;
+  idVisitor?: number;
 }

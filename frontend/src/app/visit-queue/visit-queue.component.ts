@@ -66,11 +66,12 @@ export class VisitQueueComponent implements OnInit {
     }
   }
 
+  // tslint:disable-next-line: typedef
   leaveQueue() {
-    this.queueService.leaveQueue(this.queuDetail.id).subscribe((data) => {
-      this.msg = data;
+    clearInterval(this.x);
+    this.queueService.leaveQueue(this.queuDetail.id).then((data) => {
+      this.msg = JSON.parse(data);
       clearInterval(this.x);
-      localStorage.removeItem('currentQueue');
       this.router.navigateByUrl('/jumpthequeue/join-leave');
     },
     (error) => {
@@ -79,12 +80,14 @@ export class VisitQueueComponent implements OnInit {
     }
   );
   }
+  // tslint:disable-next-line: typedef
   logOut() {
     clearInterval(this.x);
     localStorage.removeItem('currentQueue');
     localStorage.removeItem('visitor');
     this.router.navigateByUrl('/jumpthequeue/login');
   }
+  // tslint:disable-next-line: typedef
   goToEvents() {
     this.router.navigateByUrl('/jumpthequeue/join-leave');
   }

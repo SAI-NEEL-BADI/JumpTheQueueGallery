@@ -12,10 +12,19 @@ export class VisitorCrudService extends TypeOrmCrudService<Visitor> {
   constructor(@InjectRepository(Visitor) repo: Repository<Visitor>) {
     super(repo);
   }
+
   async findVisitor(username: string): Promise<Visitor | undefined> {
     return this.repo.findOne({
       where: {
         username,
+      },
+    });
+  }
+
+  async findVisitorById(id: number): Promise<Visitor | undefined> {
+    return this.repo.findOne({
+      where: {
+        id,
       },
     });
   }

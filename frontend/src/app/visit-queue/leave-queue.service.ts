@@ -10,7 +10,9 @@ export class LeaveQueueService {
 
   constructor(private http: HttpClient) { }
 
-  public leaveQueue(queueDetailId: number): Observable<any>{
-      return this.http.delete(JtqConstants.LEAVE_QUEUE_URL + queueDetailId);
+  // tslint:disable-next-line: typedef
+  public async leaveQueue(queueDetailId: number) {
+      const promise = await this.http.delete(JtqConstants.LEAVE_QUEUE_URL + queueDetailId).toPromise();
+      return JSON.stringify(promise);
    }
 }

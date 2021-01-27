@@ -9,4 +9,12 @@ export class EventCrudService extends TypeOrmCrudService<Event> {
   constructor(@InjectRepository(Event) repo: Repository<Event>) {
     super(repo);
   }
+
+  async findEventById(id: number): Promise<Event | undefined> {
+    return this.repo.findOne({
+      where: {
+        id,
+      },
+    });
+  }
 }

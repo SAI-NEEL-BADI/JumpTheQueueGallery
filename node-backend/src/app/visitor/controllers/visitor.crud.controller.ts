@@ -24,7 +24,7 @@ export class VisitorCrudController {
   }
 
   @Post('register')
-  async register(@Body() visitor: Visitor): Promise<Visitor> {   
+  async register(@Body() visitor: Visitor): Promise<Visitor> {
     const token = await this.service.registerVisitor(visitor);
     return token;
   }

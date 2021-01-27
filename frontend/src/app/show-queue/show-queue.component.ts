@@ -36,8 +36,8 @@ export class ShowQueueComponent implements OnInit {
     if (this.visitor === null) {
       this.router.navigateByUrl('/jumpthequeue/login');
     } else {
-      this.visitorCriteria.visitorId = this.visitor.id;
-      this.joinEvent.visitorId = this.visitor.id;
+      this.visitorCriteria.idVisitor = this.visitor.id;
+      this.joinEvent.idVisitor = this.visitor.id;
       this.eventService.getEvents().then((data) => {
         this.events = JSON.parse(data);
         for (const item of this.events) {
@@ -63,32 +63,17 @@ export class ShowQueueComponent implements OnInit {
   }
   // tslint:disable-next-line: typedef
   joinQueue(eventName: string, eventId: number) {
-    this.joinEvent.eventId = eventId;
-    this.eventService.joinQueue(this.joinEvent).subscribe(
+    this.joinEvent.idEvent = eventId;
+    this.eventService.joinQueue(this.joinEvent).then(
       (data) => {
-        this.eventService
-          .getVisitorEventQueueDetails(this.visitorCriteria)
-          .subscribe((queueData) => {
-            this.queueDetails = queueData.content;
-            this.localEvents = JSON.parse(localStorage.getItem('events'));
-            for (const item of this.localEvents) {
-              item.isJoined = false;
-            }
 
-            for (const item of this.localEvents) {
-              for (const queueDetail of this.queueDetails) {
-                if (queueDetail.eventId === item.id) {
-                  item.isJoined = true;
-                }
-              }
-            }
+            this.updateVisitorQueueDetails();
             localStorage.setItem('events', JSON.stringify(this.localEvents));
             localStorage.setItem('queueDetails', JSON.stringify(this.queueDetails));
-
+            localStorage.setItem('currentQueue', JSON.stringify(JSON.parse(data)));
             this.getAllQueueDetails();
             this.setLocalQueueDetails(eventId);
             this.router.navigateByUrl('/jumpthequeue/visit-queue/' + eventName);
-          });
       },
       (error) => {
         window.alert('Something went wrong. Try again');
@@ -102,10 +87,10 @@ export class ShowQueueComponent implements OnInit {
     this.queueDetails = JSON.parse(localStorage.getItem('queueDetails'));
     this.localEvents = JSON.parse(localStorage.getItem('events'));
     for (const queueItem of this.queueDetails) {
-      if (queueItem.eventId === eventId) {
+      if (queueItem.idEvent === eventId) {
         this.queueDetail = queueItem;
         for (const item of this.localEvents) {
-          if (this.queueDetail.eventId === item.id) {
+          if (this.queueDetail.idEvent === item.id) {
             this.queueDetail.currentlyBeingAttended =
               item.currentlyBeingAttended;
           }
@@ -122,15 +107,29 @@ export class ShowQueueComponent implements OnInit {
   updateVisitorQueueDetails() {
     this.eventService
       .getVisitorEventQueueDetails(this.visitorCriteria)
-      .subscribe((queueData) => {
-        this.queueDetails = queueData.content;
+      .then((queueData) => {
+        const queues = JSON.parse(queueData);
+        this.queueDetails = JSON.parse(queueData);
+        let i = 0;
+        for (const queue of queues) {
+          this.queueDetails[i].id = queue.id;
+          this.queueDetails[i].queueNumber = queue.queueNumber;
+          this.queueDetails[i].creationTime = queue.creationTime;
+          this.queueDetails[i].startTime = queue.startTime;
+          this.queueDetails[i].endTime = queue.endTime;
+          this.queueDetails[i].estimatedTime = queue.estimatedTime;
+          this.queueDetails[i].attentionTime = queue.attentionTime;
+          this.queueDetails[i].idEvent = queue.idEvent.id;
+          this.queueDetails[i].idVisitor = queue.idVisitor.id;
+          i++;
+      }
         this.localEvents = JSON.parse(localStorage.getItem('events'));
         for (const item of this.localEvents) {
           item.isJoined = false;
         }
         for (const item of this.localEvents) {
           for (const queueDetail of this.queueDetails) {
-            if (queueDetail.eventId === item.id) {
+            if (queueDetail.idEvent === item.id) {
               item.isJoined = true;
             }
           }
@@ -143,12 +142,12 @@ export class ShowQueueComponent implements OnInit {
   // tslint:disable-next-line: typedef
   getAllQueueDetails() {
     this.localEvents = JSON.parse(localStorage.getItem('events'));
-    this.eventService.getAllQueueDetails(this.criteria).subscribe((data) => {
-      this.allQueueDetails = data.content;
+    this.eventService.getAllQueueDetails().then((data) => {
+      this.allQueueDetails = JSON.parse(data);
       this.allQueueDetails.reverse();
       for (const queueDetail of this.allQueueDetails) {
         for (const item of this.localEvents) {
-          if (item.id === queueDetail.eventId) {
+          if (item.id === queueDetail.idEvent) {
             item.currentlyBeingAttended = queueDetail.queueNumber;
           }
         }
