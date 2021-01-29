@@ -20,22 +20,22 @@ export class QueuedetailsCrudController {
   constructor(public service: QueuedetailsCrudService) {}
 
   @Post('QueuesByEventId')
-  async getQueueDetailsByEventId(@Body() eventCriteria: EventCriteria): Promise<any[]> {
+  async getQueueDetailsByEventId(@Body() eventCriteria: EventCriteria): Promise<Queuedetails[]> {
     return await this.service.getQueuesByEventId(eventCriteria);
   }
 
   @Post('joinQueue')
-  async joinQueue(@Body() joinCriteria: JoinDto): Promise<any> {
+  async joinQueue(@Body() joinCriteria: JoinDto): Promise<Queuedetails | string> {
     return await this.service.joinQueue(joinCriteria);
   }
 
   @Post('queueDetailsByVisitorId')
-  async getQueueDetailsByVisitorId(@Body() criteria: VisitorCriteria): Promise<any> {
+  async getQueueDetailsByVisitorId(@Body() criteria: VisitorCriteria): Promise<Queuedetails[]> {
     return await this.service.getQueueDetailsByVisitorId(criteria);
   }
 
   @Get('getAllQueueDetails')
-  async getAllQueueDetails(): Promise<any> {
+  async getAllQueueDetails(): Promise<Queuedetails[]> {
     return await this.service.getAllQueueDetails();
   }
 }

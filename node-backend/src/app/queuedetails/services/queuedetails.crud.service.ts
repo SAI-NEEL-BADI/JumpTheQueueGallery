@@ -15,7 +15,7 @@ export class QueuedetailsCrudService extends TypeOrmCrudService<Queuedetails> {
     const list = await this.repo.query('select * from queuedetails');
     return list;
   }
-  async getQueueDetailsByVisitorId(criteria: VisitorCriteria): Promise<any> {
+  async getQueueDetailsByVisitorId(criteria: VisitorCriteria): Promise<Queuedetails[]> {
     const list = await this.repo.find({
       where: {
         idVisitor: criteria.idVisitor,
@@ -32,7 +32,7 @@ export class QueuedetailsCrudService extends TypeOrmCrudService<Queuedetails> {
   ) {
     super(repo);
   }
-  async getQueuesByEventId(criteria: EventCriteria): Promise<any[]> {
+  async getQueuesByEventId(criteria: EventCriteria): Promise<Queuedetails[]> {
     const list = await this.repo.find({
       where: {
         idEvent: criteria.idEvent,
@@ -41,7 +41,7 @@ export class QueuedetailsCrudService extends TypeOrmCrudService<Queuedetails> {
     return list;
   }
 
-  async joinQueue(joinCriteria: JoinDto): Promise<any> {
+  async joinQueue(joinCriteria: JoinDto): Promise<Queuedetails | string> {
     const idVisitor = joinCriteria.idVisitor;
     const idEvent = joinCriteria.idEvent;
     const event = await this.getEvent(idEvent);
@@ -94,6 +94,7 @@ export class QueuedetailsCrudService extends TypeOrmCrudService<Queuedetails> {
       for (let queue of list) {
         if (count == 0) {
           queue.estimatedTime = new Date();
+          if(queue.attentionTime)
           time = queue.attentionTime.getTime();
         } else {
           queue.estimatedTime = new Date(time + (event.attentionTime * 60 * count - 1));
@@ -120,14 +121,17 @@ export class QueuedetailsCrudService extends TypeOrmCrudService<Queuedetails> {
     });
   }
 
-  async createQueueNumber(event: Event): Promise<any> {
+  async createQueueNumber(event: Event): Promise<string> {
     const list = await this.getQueuesByEventId({ idEvent: event.id });
     if (list.length == 0) {
       return 'Q' + event.id + '01';
     } else {
       const queueNumber = list[list.length - 1].queueNumber;
-      const finalNumber = parseInt(queueNumber.replace(/\D/g, '')) + 1;
-      return 'Q' + finalNumber;
+      if(queueNumber){
+        const finalNumber = parseInt(queueNumber.replace(/\D/g, '')) + 1;
+        return 'Q' + finalNumber;
+      }
+      return "--";
     }
   }
 }
