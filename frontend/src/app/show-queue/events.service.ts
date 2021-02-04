@@ -20,7 +20,7 @@ export class EventsService {
   }
   // tslint:disable-next-line: typedef
   public async getVisitorEventQueueDetails(visitorCriteria: VisitorCriteria) {
-    const promise = await this.http.post(JtqConstants.GET_QUEUES_BY_VISITOR_ID_URL, visitorCriteria).toPromise();
+    const promise = await this.http.get(JtqConstants.GET_QUEUES_BY_VISITOR_ID_URL + visitorCriteria.idVisitor).toPromise();
     return JSON.stringify(promise);
   }
   // tslint:disable-next-line: typedef

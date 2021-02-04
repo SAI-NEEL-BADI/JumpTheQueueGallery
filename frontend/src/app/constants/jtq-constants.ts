@@ -7,7 +7,7 @@ export class JtqConstants {
   public static GET_ALL_EVENTS_URL =
     environment.JTQ_WEB_URL + 'event/events';
   public static GET_QUEUES_BY_VISITOR_ID_URL =
-    environment.JTQ_WEB_URL + 'queuedetails/queuedetails/queueDetailsByVisitorId';
+    environment.JTQ_WEB_URL + 'queuedetails/queuedetails/getQueueDetailsByVisitorId/';
   public static JOIN_THE_QUEUE_URL =
     environment.JTQ_WEB_URL + 'queuedetails/queuedetails/joinQueue';
   public static GET_ALL_QUEUE_DETAILS_URL =

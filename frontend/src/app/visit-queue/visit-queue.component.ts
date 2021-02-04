@@ -67,18 +67,17 @@ export class VisitQueueComponent implements OnInit {
   }
 
   // tslint:disable-next-line: typedef
-  leaveQueue() {
-    clearInterval(this.x);
-    this.queueService.leaveQueue(this.queuDetail.id).then((data) => {
+  async leaveQueue() {
+    try {
+      clearInterval(this.x);
+      const data = await this.queueService.leaveQueue(this.queuDetail.id);
       this.msg = JSON.parse(data);
       clearInterval(this.x);
       this.router.navigateByUrl('/jumpthequeue/join-leave');
-    },
-    (error) => {
+    } catch {
       window.alert('Something went wrong. Try again');
       this.router.navigateByUrl('/jumpthequeue/visit-queue/' + this.eventName);
     }
-  );
   }
   // tslint:disable-next-line: typedef
   logOut() {

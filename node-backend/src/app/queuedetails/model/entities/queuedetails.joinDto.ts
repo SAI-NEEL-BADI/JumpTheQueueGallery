@@ -1,4 +1,4 @@
-export class JoinDto {
-  idEvent!: number;
-  idVisitor!: number;
+interface JoinDto {
+  idEvent: number,
+  idVisitor: number
 }

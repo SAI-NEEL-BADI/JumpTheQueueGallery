@@ -22,11 +22,10 @@ export class SignupComponent implements OnInit {
     this.router.navigateByUrl('/jumpthequeue/login');
   }
   // tslint:disable-next-line: typedef
-  registerVisitor() {
+  async registerVisitor() {
     this.registerForm.userType = true;
-    this.registerService.saveVisitor(this.registerForm).then((data) => {
-      this.msg = JSON.parse(data);
-      this.router.navigateByUrl('/jumpthequeue/login');
-    });
+    const data = await this.registerService.saveVisitor(this.registerForm);
+    this.msg = JSON.parse(data);
+    this.router.navigateByUrl('/jumpthequeue/login');
   }
 }

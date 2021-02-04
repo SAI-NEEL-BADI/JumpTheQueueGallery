@@ -44,18 +44,18 @@ export class LoginAndRegisterComponent implements OnInit {
   }
 
   // tslint:disable-next-line: typedef
-  login(){
-    this.loginForm.username = this.userName;
-    this.loginForm.password = this.password1;
-    this.loginService.getVisitor(this.loginForm).then((res) => {
-    this.visitorDetails = JSON.parse(res);
-    this.saveDetails();
-    },
-   (con) => {
+  async login(){
+    try{
+      this.loginForm.username = this.userName;
+      this.loginForm.password = this.password1;
+      const data = await this.loginService.getVisitor(this.loginForm);
+      this.visitorDetails = JSON.parse(data);
+      this.saveDetails();
+    }
+    catch{
     window.alert('Wrong Username or Password');
     this.router.navigateByUrl('/');
    }
-    );
   }
 
   // tslint:disable-next-line: typedef

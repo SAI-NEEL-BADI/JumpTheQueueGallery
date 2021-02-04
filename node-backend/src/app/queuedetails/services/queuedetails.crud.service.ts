@@ -5,26 +5,10 @@ import { Repository } from 'typeorm';
 import { Event } from '../../event/model/entities/event.entity';
 import { Visitor } from '../../visitor/model/entities/visitor.entity';
 import { Queuedetails } from '../model/entities/queuedetails.entity';
-import { JoinDto } from '../model/entities/queuedetails.joinDto';
-import { EventCriteria } from '../model/queuedetails.eventCriteria';
-import { VisitorCriteria } from '../model/queuedetails.visitorCriteria';
 
 @Injectable()
 export class QueuedetailsCrudService extends TypeOrmCrudService<Queuedetails> {
-  async getAllQueueDetails(): Promise<any> {
-    const list = await this.repo.query('select * from queuedetails');
-    return list;
-  }
-  async getQueueDetailsByVisitorId(criteria: VisitorCriteria): Promise<Queuedetails[]> {
-    const list = await this.repo.find({
-      where: {
-        idVisitor: criteria.idVisitor,
-      },
-    });
-    return list;
-  }
-  queueDetail: any;
-
+  
   constructor(
     @InjectRepository(Queuedetails) repo: Repository<Queuedetails>,
     @InjectRepository(Event) private readonly eventRepository: Repository<Event>,
@@ -32,10 +16,24 @@ export class QueuedetailsCrudService extends TypeOrmCrudService<Queuedetails> {
   ) {
     super(repo);
   }
-  async getQueuesByEventId(criteria: EventCriteria): Promise<Queuedetails[]> {
+
+  async getAllQueueDetails(): Promise<Queuedetails[]> {
+    const list = await this.repo.query('select * from queuedetails');
+    return list;
+  }
+  async getQueueDetailsByVisitorId(idVisitor: number): Promise<Queuedetails[]> {
     const list = await this.repo.find({
       where: {
-        idEvent: criteria.idEvent,
+        idVisitor: idVisitor,
+      },
+    });
+    return list;
+  }
+
+  async getQueuesByEventId(idEvent: number): Promise<Queuedetails[]> {
+    const list = await this.repo.find({
+      where: {
+        idEvent: idEvent,
       },
     });
     return list;
@@ -57,7 +55,7 @@ export class QueuedetailsCrudService extends TypeOrmCrudService<Queuedetails> {
 
       if (queuedetail == undefined || queuedetail == null) {
         const token = await this.createQueueDetail(visitor, event);
-        return token;
+        return token!;
       }
       return queuedetail;
     }
@@ -65,8 +63,8 @@ export class QueuedetailsCrudService extends TypeOrmCrudService<Queuedetails> {
     return 'no access!!!!!!!!!';
   }
 
-  async createQueueDetail(visitor: Visitor, event: Event): Promise<any> {
-    let time: number | any;
+  async createQueueDetail(visitor: Visitor, event: Event): Promise<Queuedetails | undefined> {
+    let time!: number;
     if (event.attentionTime) {
       time = new Date().getTime() + event.attentionTime * 60;
     }
@@ -86,10 +84,10 @@ export class QueuedetailsCrudService extends TypeOrmCrudService<Queuedetails> {
   }
 
   async setEstimatedTime(event: Event) {
-    let time: number | any;
+    let time!: number;
     time = new Date().getTime();
     if (event.attentionTime) {
-      const list = await this.getQueuesByEventId({ idEvent: event.id });
+      const list = await this.getQueuesByEventId(event.id );
       let count = 0;
       for (let queue of list) {
         if (count == 0) {
@@ -106,12 +104,13 @@ export class QueuedetailsCrudService extends TypeOrmCrudService<Queuedetails> {
     }
   }
 
-  async getEvent(id: number): Promise<Event | undefined> {
-    return await this.eventRepository.findOne({
+  async getEvent(id: number): Promise<Event> {
+    const event = await this.eventRepository.findOne({
       where: {
         id: id,
       },
     });
+    return event!;
   }
   async getVisitor(id: number): Promise<Visitor | undefined> {
     return await this.visitorRepository.findOne({
@@ -122,7 +121,7 @@ export class QueuedetailsCrudService extends TypeOrmCrudService<Queuedetails> {
   }
 
   async createQueueNumber(event: Event): Promise<string> {
-    const list = await this.getQueuesByEventId({ idEvent: event.id });
+    const list = await this.getQueuesByEventId(event.id);
     if (list.length == 0) {
       return 'Q' + event.id + '01';
     } else {
